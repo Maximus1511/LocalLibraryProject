@@ -8,6 +8,10 @@
 <body>
 <p th:text="${person.getFullName() + ', ' + person.getYearOfBirth()}">VALUE</p>
 
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+  <input type="submit" value="Delete"/>
+</form>
+
 <div th:if="${books.isEmpty()}">
   <p>Person doesn't have any book</p>
   <hr/>
