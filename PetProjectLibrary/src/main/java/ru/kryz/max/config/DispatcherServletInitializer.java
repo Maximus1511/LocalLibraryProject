@@ -1,14 +1,9 @@
 package ru.kryz.max.config;
 
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import java.util.EnumSet;
 
 public class DispatcherServletInitializer
 extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -17,7 +12,7 @@ extends AbstractAnnotationConfigDispatcherServletInitializer {
         return null;
     }
 
-    //determine configuration class
+    //Determine configuration class
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class[]{SpringConfig.class};
@@ -29,7 +24,7 @@ extends AbstractAnnotationConfigDispatcherServletInitializer {
         return new String[]{"/"};
     }
 
-    //this method necessary for PATCH method. PATCH =  Post + hidden field
+    //This method necessary for PATCH method. PATCH =  Post + hidden field
     @Override
     public void onStartup(ServletContext aServletContext) throws ServletException {
         super.onStartup(aServletContext);

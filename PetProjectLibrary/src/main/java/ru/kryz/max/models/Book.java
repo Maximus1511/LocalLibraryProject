@@ -1,12 +1,17 @@
 package ru.kryz.max.models;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+
 public class Book {
     private int id;
 
+    @NotEmpty(message = "Should not be empty")
     private String title;
 
     private String author;
 
+    @Min(value = 0, message = "Should be greater than 0")
     private int year;
 
     public Book() {

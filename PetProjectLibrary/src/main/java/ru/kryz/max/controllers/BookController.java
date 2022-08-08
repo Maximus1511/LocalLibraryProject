@@ -1,6 +1,5 @@
 package ru.kryz.max.controllers;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +9,7 @@ import ru.kryz.max.dao.BookDAO;
 import ru.kryz.max.dao.PersonDAO;
 import ru.kryz.max.models.Book;
 import ru.kryz.max.models.Person;
-
+import javax.validation.Valid;
 import java.util.Optional;
 
 @Controller
@@ -35,13 +34,12 @@ public class BookController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
         model.addAttribute("book", bookDAO.show(id));
-
         Optional<Person> bookOwner = bookDAO.getBookOwner(id);
 
         if (bookOwner.isPresent())
-            model.addAttribute("owner", bookOwner.get());
+            model.addAttribute("owner", bookOwner.get()); //owner exists
         else
-            model.addAttribute("people", personDAO.showAll());
+            model.addAttribute("people", personDAO.showAll()); // book in library
 
         return "books/show";
     }

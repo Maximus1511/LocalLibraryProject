@@ -1,6 +1,5 @@
 package ru.kryz.max.controllers;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.kryz.max.dao.PersonDAO;
 import ru.kryz.max.models.Person;
 import ru.kryz.max.util.PersonValidator;
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/people")
@@ -42,24 +42,25 @@ public class PeopleController {
                          BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
 
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) //if has any error, return this new view again
             return "people/new";
 
         personDAO.save(person);
         return "redirect:/people/showAll";
     }
 
-    //update exist person
+    //go to edit page
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("person", personDAO.show(id));
         return "people/edit";
     }
 
+    //Update person info
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
                          @PathVariable("id") int id) {
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) //if has any error, return this update view again
             return "people/edit";
 
         personDAO.update(id, person);
@@ -74,6 +75,7 @@ public class PeopleController {
         return "people/show";
     }
 
+    //Delete person
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
         personDAO.delete(id);

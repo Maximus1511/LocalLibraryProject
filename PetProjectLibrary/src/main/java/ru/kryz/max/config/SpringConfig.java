@@ -5,6 +5,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -19,14 +21,17 @@ import javax.sql.DataSource;
 @Configuration
 @ComponentScan("ru.kryz.max")
 @EnableWebMvc
+//@PropertySource("classpath: database.properties")
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
+    private final Environment environment;
 
 
     @Autowired
-    public SpringConfig(ApplicationContext applicationContext) {
+    public SpringConfig(ApplicationContext applicationContext, Environment environment) {
         this.applicationContext = applicationContext;
+        this.environment = environment;
     }
     //Config "place" for our WebPages (views)
     @Bean
@@ -57,15 +62,16 @@ public class SpringConfig implements WebMvcConfigurer {
     public DataSource dataSource(){
         DriverManagerDataSource dataSource =  new DriverManagerDataSource();
 
+        //not good practice...
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/local_library");
         dataSource.setUsername("postgres");
         dataSource.setPassword("sql");
 
-        /*//так правильно хранить все в файле, но у меня почему-то перестает работать...
-        dataSource.setDriverClassName(environment.getRequiredProperty("driver"));
+        //import database data from file is best practice
+        /*dataSource.setDriverClassName(environment.getRequiredProperty("driver"));
         dataSource.setUrl(environment.getProperty("url"));
-        dataSource.setUsername(environment.getProperty("username"));
+        dataSource.setUsername(environment.getProperty("login"));
         dataSource.setPassword(environment.getProperty("password"));*/
         return dataSource;
     }
