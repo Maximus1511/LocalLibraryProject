@@ -21,4 +21,14 @@ public class BookDAO {
     public List<Book> showAll() {
         return jdbcTemplate.query("SELECT * FROM Book", new BeanPropertyRowMapper<>(Book.class));
     }
+
+    public Book show(int id) {
+        return jdbcTemplate.query("SELECT * FROM Book WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Book.class))
+                .stream().findAny().orElse(null);
+    }
+
+    public void save(Book book) {
+        jdbcTemplate.update("INSERT INTO Book(title, author, year) VALUES(?, ?, ?)", book.getTitle(),
+                book.getAuthor(), book.getYear());
+    }
 }
