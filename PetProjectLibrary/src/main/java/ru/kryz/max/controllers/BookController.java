@@ -9,6 +9,8 @@ import ru.kryz.max.dao.BookDAO;
 import ru.kryz.max.dao.PersonDAO;
 import ru.kryz.max.models.Book;
 import ru.kryz.max.models.Person;
+import ru.kryz.max.services.PeopleService;
+
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -18,11 +20,13 @@ public class BookController {
 
     private final BookDAO bookDAO;
     private final PersonDAO personDAO;
+    private final PeopleService peopleService;
 
     @Autowired
-    public BookController(BookDAO bookDAO, PersonDAO personDAO) {
+    public BookController(BookDAO bookDAO, PersonDAO personDAO, PeopleService peopleService) {
         this.bookDAO = bookDAO;
         this.personDAO = personDAO;
+        this.peopleService = peopleService;
     }
 
     @GetMapping("/showAll")
@@ -39,7 +43,7 @@ public class BookController {
         if (bookOwner.isPresent())
             model.addAttribute("owner", bookOwner.get()); //owner exists
         else
-            model.addAttribute("people", personDAO.showAll()); // book in library
+            model.addAttribute("people", peopleService.findAll()); // book in library
 
         return "books/show";
     }

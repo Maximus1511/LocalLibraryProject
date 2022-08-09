@@ -1,7 +1,6 @@
 package ru.kryz.max.models;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 

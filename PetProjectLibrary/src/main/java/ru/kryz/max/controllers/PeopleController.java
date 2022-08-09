@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kryz.max.dao.PersonDAO;
 import ru.kryz.max.models.Person;
+import ru.kryz.max.services.PeopleService;
 import ru.kryz.max.util.PersonValidator;
 import javax.validation.Valid;
 
@@ -16,17 +17,19 @@ public class PeopleController {
 
     private final PersonDAO personDAO;
     private final PersonValidator personValidator;
+    private final PeopleService peopleService;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
+    public PeopleController(PersonDAO personDAO, PersonValidator personValidator, PeopleService peopleService) {
         this.personDAO = personDAO;
         this.personValidator = personValidator;
+        this.peopleService = peopleService;
     }
 
     @GetMapping("/showAll")
     public String showAllReaders(Model model){
         //get all people from DAO
-        model.addAttribute("people", personDAO.showAll());
+        model.addAttribute("people", peopleService.findAll());
         return "people/showAll";
     }
 

@@ -6,4 +6,5 @@ import ru.kryz.max.models.Person;
 
 @Repository
 public interface PeopleRepository extends JpaRepository<Person, Integer> {
+
 }

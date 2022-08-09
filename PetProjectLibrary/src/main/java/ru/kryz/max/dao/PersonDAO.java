@@ -20,10 +20,10 @@ public class PersonDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Person> showAll(){
+    /*public List<Person> showAll(){
         return jdbcTemplate.query("SELECT * FROM Person",
                 new BeanPropertyRowMapper<>(Person.class));
-    }
+    }*/
 
     public void save(Person person) {
         jdbcTemplate.update("INSERT INTO Person(full_name, year_of_birth) VALUES(?, ?)",

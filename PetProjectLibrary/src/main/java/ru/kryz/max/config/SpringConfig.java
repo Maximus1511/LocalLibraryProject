@@ -27,10 +27,10 @@ import java.util.Properties;
 
 @Configuration
 @ComponentScan("ru.kryz.max")
-@EnableWebMvc
-//@PropertySource("classpath: database.properties")
+@PropertySource("classpath:hibernate.properties")
 @EnableTransactionManagement
 @EnableJpaRepositories("ru.kryz.max.repositories")
+@EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
 
     private final ApplicationContext applicationContext;
@@ -72,16 +72,22 @@ public class SpringConfig implements WebMvcConfigurer {
         DriverManagerDataSource dataSource =  new DriverManagerDataSource();
 
         //not good practice...
-        dataSource.setDriverClassName("org.postgresql.Driver");
+     /*   dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/local_library");
         dataSource.setUsername("postgres");
-        dataSource.setPassword("sql");
+        dataSource.setPassword("sql");*/
 
         //import database data from file is best practice
-        /*dataSource.setDriverClassName(environment.getRequiredProperty("driver"));
+      /*  dataSource.setDriverClassName(environment.getRequiredProperty("driver"));
         dataSource.setUrl(environment.getProperty("url"));
         dataSource.setUsername(environment.getProperty("login"));
         dataSource.setPassword(environment.getProperty("password"));*/
+        dataSource.setDriverClassName(environment.getRequiredProperty("hibernate.driver_class"));
+        dataSource.setUrl(environment.getRequiredProperty("hibernate.connection.url"));
+        dataSource.setUsername(environment.getRequiredProperty("hibernate.connection.username"));
+        dataSource.setPassword(environment.getRequiredProperty("hibernate.connection.password"));
+
+
         return dataSource;
     }
 
@@ -116,7 +122,6 @@ public class SpringConfig implements WebMvcConfigurer {
     public PlatformTransactionManager transactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-
         return transactionManager;
     }
 }
