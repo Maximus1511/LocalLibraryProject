@@ -69,4 +69,12 @@ public class Book {
     public void setYear(int year) {
         this.year = year;
     }
+
+    public Person getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Person owner) {
+        this.owner = owner;
+    }
 }

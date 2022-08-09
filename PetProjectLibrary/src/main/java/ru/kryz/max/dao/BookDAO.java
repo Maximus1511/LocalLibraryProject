@@ -20,28 +20,28 @@ public class BookDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Book> showAll() {
+   /* public List<Book> showAll() {
         return jdbcTemplate.query("SELECT * FROM Book", new BeanPropertyRowMapper<>(Book.class));
-    }
+    }*/
 
-    public Book show(int id) {
+    /*public Book show(int id) {
         return jdbcTemplate.query("SELECT * FROM Book WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper<>(Book.class))
                 .stream().findAny().orElse(null);
-    }
+    } */
 
-    public void save(Book book) {
+    /*public void save(Book book) {
         jdbcTemplate.update("INSERT INTO Book(title, author, year) VALUES(?, ?, ?)", book.getTitle(),
                 book.getAuthor(), book.getYear());
-    }
+    }*/
 
-    public void update(int id, Book updatedBook) {
+    /*public void update(int id, Book updatedBook) {
         jdbcTemplate.update("UPDATE Book SET title=?, author=?, year=? WHERE id=?", updatedBook.getTitle(),
                 updatedBook.getAuthor(), updatedBook.getYear(), id);
-    }
+    }*/
 
-    public void delete(int id) {
+   /* public void delete(int id) {
         jdbcTemplate.update("DELETE FROM Book WHERE id=?", id);
-    }
+    }*/
 
     // Join book table and person table, get person with this book id
     public Optional<Person> getBookOwner(int id) {

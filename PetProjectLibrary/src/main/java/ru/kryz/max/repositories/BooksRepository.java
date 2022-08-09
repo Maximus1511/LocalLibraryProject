@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.kryz.max.models.Book;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, Integer> {
+public interface BooksRepository extends JpaRepository<Book, Integer> {
 }
