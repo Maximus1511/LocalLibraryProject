@@ -26,7 +26,6 @@ public class PeopleController {
 
     @GetMapping("/showAll")
     public String showAllReaders(Model model){
-        //get all people from DAO
         model.addAttribute("people", peopleService.findAll());
         return "people/showAll";
     }

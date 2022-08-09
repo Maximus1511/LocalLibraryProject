@@ -18,32 +18,39 @@ import java.util.Optional;
 @RequestMapping("/books")
 public class BookController {
 
-    private final BookDAO bookDAO;
     private final PeopleService peopleService;
     private final BooksService booksService;
 
     @Autowired
-    public BookController(BookDAO bookDAO, PeopleService peopleService, BooksService booksService) {
-        this.bookDAO = bookDAO;
+    public BookController(PeopleService peopleService, BooksService booksService) {
         this.booksService = booksService;
         this.peopleService = peopleService;
     }
 
     @GetMapping("/showAll")
-    public String showAll(Model model){
-        model.addAttribute("books", booksService.findAll());
+    public String showAll(Model model, @RequestParam(value = "page", required = false) Integer page,
+                        @RequestParam(value = "books_per_page", required = false) Integer booksPerPage,
+                        @RequestParam(value = "sort_by_year", required = false) boolean sortByYear) {
+
+        if (page == null || booksPerPage == null) {
+            //System.out.println("sortByYear = " + sortByYear); // for debug
+            model.addAttribute("books", booksService.findAll(sortByYear)); // get all books
+        }
+        else
+            model.addAttribute("books", booksService.findWithPagination(page, booksPerPage, sortByYear));
         return "books/showAll";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model, @ModelAttribute("person") Person person) {
         model.addAttribute("book", booksService.findOne(id));
-        Optional<Person> bookOwner = bookDAO.getBookOwner(id);
 
-        if (bookOwner.isPresent())
-            model.addAttribute("owner", bookOwner.get()); //owner exists
+        Person bookOwner = booksService.getBookOwner(id);
+
+        if (bookOwner != null)
+            model.addAttribute("owner", bookOwner);
         else
-            model.addAttribute("people", peopleService.findAll()); // book in library
+            model.addAttribute("people", peopleService.findAll());
 
         return "books/show";
     }
@@ -87,13 +94,13 @@ public class BookController {
 
     @PatchMapping("/{id}/assign")
     public String assign(@PathVariable("id") int id, @ModelAttribute("person") Person selectedPerson) {
-        bookDAO.assign(id, selectedPerson);
+        booksService.assign(id, selectedPerson);
         return "redirect:/books/showAll";
     }
 
     @PatchMapping("/{id}/release")
     public String release(@PathVariable("id") int id) {
-        bookDAO.release(id);
+        booksService.release(id);
         return "redirect:/books/" + id;
     }
 

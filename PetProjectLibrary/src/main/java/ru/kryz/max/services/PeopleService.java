@@ -1,5 +1,6 @@
 package ru.kryz.max.services;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -7,6 +8,8 @@ import ru.kryz.max.models.Book;
 import ru.kryz.max.models.Person;
 import ru.kryz.max.repositories.PeopleRepository;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,7 +51,22 @@ public class PeopleService {
 
     public List<Book> getBooksByPersonId(int id) {
         Optional<Person> person = peopleRepository.findById(id);
-        return null;
+
+        if (person.isPresent()) {
+            Hibernate.initialize(person.get().getBooks());//need to prevent lazy error load
+            // Check time for each book
+            person.get().getBooks().forEach(book -> {
+                long diffInMillies = Math.abs(book.getTakenAt().getTime() - new Date().getTime());
+                // 864000000 милисекунд = 10 суток
+                if (diffInMillies > 1000*30)
+                    book.setExpired(true); // book expired
+            });
+
+            return person.get().getBooks();
+        }
+        else {
+            return Collections.emptyList();
+        }
     }
 
     public Optional<Person> getPersonByFullName(String fullName) {
