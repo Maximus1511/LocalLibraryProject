@@ -1,18 +1,34 @@
 package ru.kryz.max.models;
 
+import jakarta.persistence.*;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
+
+@Entity
+@Table(name = "Book")
 public class Book {
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotEmpty(message = "Should not be empty")
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "author")
     private String author;
 
     @Min(value = 0, message = "Should be greater than 0")
+    @Column(name = "year")
     private int year;
+
+    @ManyToOne
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    private Person owner;
 
     public Book() {
     }
